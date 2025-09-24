@@ -83,18 +83,18 @@ const Orders = () => {
                     <div className="relative h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent mb-4 sm:mb-6 max-w-xs sm:max-w-sm md:max-w-md mx-auto"></div>
                 </div>
 
-                {/* Orders Grid */}
+                {/* Orders Grid - Responsive */}
                 <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
                     {orders.map((order) => {
                         const firstItem = order.items[0]
                         return (
                             <div
                                 key={order._id}
-                                className="bg-white shadow-md rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col gap-4 sm:gap-5"
+                                className="bg-white shadow-lg rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row gap-4 sm:gap-5"
                             >
                                 {/* Product Image */}
                                 {firstItem?.product?.image?.url && (
-                                    <div className="w-full h-32 sm:h-36 md:h-40 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
+                                    <div className="w-full sm:w-32 md:w-36 h-32 sm:h-36 md:h-40 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
                                         <img
                                             src={firstItem.product.image.url}
                                             alt={firstItem.name}

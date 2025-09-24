@@ -7,7 +7,7 @@ dotenv.config({
   path: `.env.${process.env.NODE_ENV || "development"}`
 })
 
-console.log("callback url",process.env.CALLBACK_URL)
+// console.log("callback url",process.env.CALLBACK_URL)
 
 passport.use(
   new GoogleStrategy(

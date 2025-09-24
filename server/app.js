@@ -4,9 +4,9 @@ import dotenv from "dotenv"
 dotenv.config({
   path: `.env.${process.env.NODE_ENV || "development"}`
 })
-console.log("app", process.env.NODE_ENV)
-console.log("url", process.env.FRONTEND_URL)
-console.log("callback url",process.env.CALLBACK_URL)
+// console.log("app", process.env.NODE_ENV)
+// console.log("url", process.env.FRONTEND_URL)
+// console.log("callback url",process.env.CALLBACK_URL)
 
 
 
