@@ -27,7 +27,7 @@ const Category = () => {
           trigger: sectionRef.current,
           start: "top 50%",
           toggleActions: "play none none reset",
-          once:true
+          once: true
         },
         opacity: 0,
         y: 50,
@@ -50,11 +50,11 @@ const Category = () => {
             <span className="text-sm font-semibold tracking-wide uppercase">Explore Categories</span>
           </div>
 
-          <h1 className="text-3xl lg:text-5xl font-bold text-[#27292e]">
+          <h1 className="text-2xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--heading-color)] to-[var(--secondary-bg-color)] lg:py-4">
             Shop by Category
           </h1>
 
-          <p className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-mb sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
             Discover our curated collection of travel essentials designed for every adventure
           </p>
         </div>

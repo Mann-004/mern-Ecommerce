@@ -63,8 +63,8 @@ const Orders = () => {
             ref={sectionRef}
             className="relative w-full bg-gradient-to-br from-yellow-100 via-white to-purple-100 px-4 sm:px-6 md:px-8 lg:px-10 py-8 sm:py-12 md:py-16 lg:py-20"
         >
-            <div className="max-w-screen-xl mx-auto">
-                <div className="text-center mb-8 sm:mb-12 md:mb-16 relative">
+            <div className="max-w-screen-xl mx-auto py-12">
+                <div className="text-center mb-8 sm:mb-12 md:mb-16 relative ">
                     <div className="relative flex justify-center items-center gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8">
                         <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
                             <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
@@ -84,17 +84,17 @@ const Orders = () => {
                 </div>
 
                 {/* Orders Grid - Responsive */}
-                <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+                <div className="grid gap-4 sm:gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
                     {orders.map((order) => {
                         const firstItem = order.items[0]
                         return (
                             <div
                                 key={order._id}
-                                className="bg-white shadow-lg rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row gap-4 sm:gap-5"
+                                className="bg-white shadow-lg rounded-lg sm:rounded-xl p-4 border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row gap-4 sm:gap-5"
                             >
                                 {/* Product Image */}
                                 {firstItem?.product?.image?.url && (
-                                    <div className="w-full sm:w-32 md:w-36 h-32 sm:h-36 md:h-40 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
+                                    <div className="w-full sm:w-32 md:w-36  sm:h-36 md:h-40 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
                                         <img
                                             src={firstItem.product.image.url}
                                             alt={firstItem.name}
@@ -112,8 +112,8 @@ const Orders = () => {
                                         </h2>
                                         <span
                                             className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium rounded-full ${order.status === "completed"
-                                                    ? "bg-green-100 text-green-700"
-                                                    : "bg-yellow-100 text-yellow-700"
+                                                ? "bg-green-100 text-green-700"
+                                                : "bg-yellow-100 text-yellow-700"
                                                 }`}
                                         >
                                             {order.status === "completed" ? (
@@ -127,16 +127,25 @@ const Orders = () => {
                                     </div>
 
                                     {/* Shipping Address */}
-                                    <div className="mb-2 sm:mb-3 bg-gray-50 p-2 sm:p-3 rounded-lg border border-gray-200 flex items-start gap-2">
-                                        <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 mt-0.5 flex-shrink-0" />
-                                        <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                                            {order.shippingAddress.street},{" "}
-                                            {order.shippingAddress.city},{" "}
-                                            {order.shippingAddress.state},{" "}
-                                            {order.shippingAddress.country} -{" "}
-                                            {order.shippingAddress.postalCode}
-                                        </p>
-                                    </div>
+                                    {/* Shipping Address */}
+                                    {order.shippingAddress ? (
+                                        <div className="mb-2 sm:mb-3 bg-gray-50 p-2 sm:p-3 rounded-lg border border-gray-200 flex items-start gap-2">
+                                            <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 mt-0.5 flex-shrink-0" />
+                                            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                                                {order.shippingAddress.street},{" "}
+                                                {order.shippingAddress.city},{" "}
+                                                {order.shippingAddress.state},{" "}
+                                                {order.shippingAddress.country} -{" "}
+                                                {order.shippingAddress.postalCode}
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="mb-2 sm:mb-3 bg-gray-50 p-2 sm:p-3 rounded-lg border border-gray-200 flex items-center gap-2">
+                                            <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+                                            <p className="text-xs sm:text-sm text-gray-600 italic">No shipping address available</p>
+                                        </div>
+                                    )}
+
 
                                     {/* Items */}
                                     <ul className="flex-1 space-y-1 sm:space-y-1.5 mb-2 sm:mb-3">
