@@ -97,18 +97,18 @@ const AuthPage = () => {
     }
 
     return (
-        <div className="w-full min-h-screen bg-[#f2f2f2] flex items-center justify-center">
-            <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-2 text-[var(--heading-color)]">
+        <div className="w-full min-h-screen bg-[#f2f2f2] flex items-center justify-center p-4">
+            <div className="bg-white p-4 lg:p-8 rounded-xl shadow-md w-full max-w-md">
+                <h2 className="lg:text-2xl font-bold lg:mb-2 text-[var(--heading-color)] text-xl">
                     {isRegister ? "Create Account" : "Welcome Back"}
                 </h2>
-                <p className="text-zinc-700 mb-6">
+                <p className="text-zinc-700 lg:mb-6 mb-4">
                     {isRegister ? "Join us and start your journey" : "Login to continue"}
                 </p>
 
                 <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                     {isRegister && (
-                        <div className="flex gap-4">
+                        <div className="flex lg:gap-4 gap-3">
                             <InputField
                                 id="firstname"
                                 label="First Name"
@@ -144,7 +144,7 @@ const AuthPage = () => {
                         >
                             Password
                         </label>
-                        <div className="flex items-center border border-gray-300 rounded-lg px-3 focus-within:ring-1 focus-within:ring-[var(--heading-color)]">
+                        <div className="flex items-center border border-gray-300 rounded-lg px-2 lg:px-3 focus-within:ring-1 focus-within:ring-[var(--heading-color)]">
                             <span className="text-gray-500">
                                 <FaLock />
                             </span>
@@ -153,7 +153,7 @@ const AuthPage = () => {
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Enter your password"
                                 {...register("password")}
-                                className="w-full px-3 py-2 outline-none rounded-lg"
+                                className="w-full lg:px-3 lg:py-2 p-2 outline-none rounded-lg"
                             />
                             <span
                                 className="text-gray-500 cursor-pointer"
@@ -197,7 +197,7 @@ const AuthPage = () => {
                 <button
                     type="button"
                     onClick={() => window.open(`${import.meta.env.VITE_API_URL}/api/users/google`, "_self")}
-                    className="w-full mt-4 flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-100"
+                    className="w-full mt-4 flex items-center justify-center gap-2 border border-gray-300 lg:py-2 py-2 rounded-lg hover:bg-gray-100"
                 >
                     <img
                         src="https://developers.google.com/identity/images/g-logo.png"
@@ -228,14 +228,14 @@ const InputField = ({ id, label, type = "text", placeholder, icon, register, err
             <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
                 {label}
             </label>
-            <div className="flex items-center border border-gray-300 rounded-lg px-3 focus-within:ring-1 focus-within:ring-[var(--heading-color)]">
+            <div className="flex items-center border border-gray-300 rounded-lg px-2 lg:px-3 focus-within:ring-1 focus-within:ring-[var(--heading-color)]">
                 {icon && <span className="text-gray-500">{icon}</span>}
                 <input
                     id={id}
                     type={type}
                     placeholder={placeholder}
                     {...register(id)}
-                    className="w-full px-3 py-2 outline-none rounded-lg"
+                    className="w-full lg:px-3 lg:py-2 px-2 py-1 outline-none rounded-lg"
                 />
             </div>
             {error && <p className="text-red-600 text-xs mt-1">{error}</p>}

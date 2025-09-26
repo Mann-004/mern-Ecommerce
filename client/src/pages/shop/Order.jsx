@@ -1,6 +1,14 @@
 import React, { useEffect, useState, useRef } from "react"
 import { getUserOrdersApi } from "../../api/ordersAPI"
-import { CheckCircle, Clock, Package, MapPin, ArrowRight, Plane, Luggage } from "lucide-react"
+import {
+    CheckCircle,
+    Clock,
+    Package,
+    MapPin,
+    ArrowRight,
+    Plane,
+    Luggage
+} from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -10,6 +18,8 @@ gsap.registerPlugin(ScrollTrigger)
 const Orders = () => {
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
+    const [currentPage, setCurrentPage] = useState(1)
+    const ordersPerPage = 6 // 👈 you can adjust this
     const navigate = useNavigate()
     const sectionRef = useRef(null)
 
@@ -26,6 +36,33 @@ const Orders = () => {
         }
         fetchOrders()
     }, [])
+
+    // Pagination calculations
+    const totalPages = Math.ceil(orders.length / ordersPerPage)
+    const indexOfLastOrder = currentPage * ordersPerPage
+    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage
+    const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder)
+
+    const handlePageChange = (page) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page)
+            window.scrollTo({ top: 0, behavior: "smooth" })
+        }
+    }
+
+
+    const getPaginationRange = () => {
+        const totalNumbers = 5 // 👈 show only 5 pages at a time
+        let start = Math.max(currentPage - Math.floor(totalNumbers / 2), 1)
+        let end = start + totalNumbers - 1
+
+        if (end > totalPages) {
+            end = totalPages
+            start = Math.max(end - totalNumbers + 1, 1)
+        }
+
+        return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+    }
 
     if (loading) {
         return (
@@ -65,6 +102,7 @@ const Orders = () => {
         >
             <div className="max-w-screen-xl mx-auto py-12">
                 <div className="text-center mb-8 sm:mb-12 md:mb-16 relative ">
+                    {/* Header icons */}
                     <div className="relative flex justify-center items-center gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8">
                         <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
                             <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
@@ -83,9 +121,9 @@ const Orders = () => {
                     <div className="relative h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent mb-4 sm:mb-6 max-w-xs sm:max-w-sm md:max-w-md mx-auto"></div>
                 </div>
 
-                {/* Orders Grid - Responsive */}
+                {/* Orders Grid */}
                 <div className="grid gap-4 sm:gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
-                    {orders.map((order) => {
+                    {currentOrders.map((order) => {
                         const firstItem = order.items[0]
                         return (
                             <div
@@ -94,7 +132,7 @@ const Orders = () => {
                             >
                                 {/* Product Image */}
                                 {firstItem?.product?.image?.url && (
-                                    <div className="w-full sm:w-32 md:w-36  sm:h-36 md:h-40 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
+                                    <div className="w-full sm:w-32 md:w-36 sm:h-36 md:h-40 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
                                         <img
                                             src={firstItem.product.image.url}
                                             alt={firstItem.name}
@@ -112,8 +150,8 @@ const Orders = () => {
                                         </h2>
                                         <span
                                             className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium rounded-full ${order.status === "completed"
-                                                ? "bg-green-100 text-green-700"
-                                                : "bg-yellow-100 text-yellow-700"
+                                                    ? "bg-green-100 text-green-700"
+                                                    : "bg-yellow-100 text-yellow-700"
                                                 }`}
                                         >
                                             {order.status === "completed" ? (
@@ -127,25 +165,23 @@ const Orders = () => {
                                     </div>
 
                                     {/* Shipping Address */}
-                                    {/* Shipping Address */}
                                     {order.shippingAddress ? (
                                         <div className="mb-2 sm:mb-3 bg-gray-50 p-2 sm:p-3 rounded-lg border border-gray-200 flex items-start gap-2">
                                             <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 mt-0.5 flex-shrink-0" />
                                             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                                                {order.shippingAddress.street},{" "}
-                                                {order.shippingAddress.city},{" "}
-                                                {order.shippingAddress.state},{" "}
-                                                {order.shippingAddress.country} -{" "}
+                                                {order.shippingAddress.street}, {order.shippingAddress.city},{" "}
+                                                {order.shippingAddress.state}, {order.shippingAddress.country} -{" "}
                                                 {order.shippingAddress.postalCode}
                                             </p>
                                         </div>
                                     ) : (
                                         <div className="mb-2 sm:mb-3 bg-gray-50 p-2 sm:p-3 rounded-lg border border-gray-200 flex items-center gap-2">
                                             <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
-                                            <p className="text-xs sm:text-sm text-gray-600 italic">No shipping address available</p>
+                                            <p className="text-xs sm:text-sm text-gray-600 italic">
+                                                No shipping address available
+                                            </p>
                                         </div>
                                     )}
-
 
                                     {/* Items */}
                                     <ul className="flex-1 space-y-1 sm:space-y-1.5 mb-2 sm:mb-3">
@@ -180,16 +216,14 @@ const Orders = () => {
                                             {new Date(order.createdAt).toLocaleDateString("en-IN", {
                                                 day: "numeric",
                                                 month: "short",
-                                                year: "numeric",
+                                                year: "numeric"
                                             })}
                                         </p>
                                         <div className="flex items-center gap-2 sm:gap-3">
                                             <p className="font-semibold text-gray-800">
                                                 ₹{order.totalAmount.toLocaleString("en-IN")}
                                             </p>
-                                            <button
-                                                className="group inline-flex items-center gap-1 bg-[var(--heading-color)] text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-xs font-semibold uppercase tracking-wide hover:shadow-md"
-                                            >
+                                            <button className="group inline-flex items-center gap-1 bg-[var(--heading-color)] text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-xs font-semibold uppercase tracking-wide hover:shadow-md">
                                                 View
                                                 <ArrowRight className="w-2.5 h-2.5 sm:w-3 sm:h-3 group-hover:translate-x-1 transition-transform duration-300" />
                                             </button>
@@ -200,6 +234,43 @@ const Orders = () => {
                         )
                     })}
                 </div>
+
+                {totalPages > 1 && (
+                    <div className="flex justify-center items-center gap-1 mt-8">
+                        {/* Prev Button */}
+                        <button
+                            disabled={currentPage === 1}
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            className="px-3 py-1 text-sm rounded-md bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Prev
+                        </button>
+
+                        {/* Dynamic Page Numbers */}
+                        {getPaginationRange().map((page) => (
+                            <button
+                                key={page}
+                                onClick={() => handlePageChange(page)}
+                                className={`px-3 py-1 text-sm rounded-md ${currentPage === page
+                                        ? "bg-[var(--heading-color)] text-white"
+                                        : "bg-gray-100 hover:bg-gray-200"
+                                    }`}
+                            >
+                                {page}
+                            </button>
+                        ))}
+
+                        {/* Next Button */}
+                        <button
+                            disabled={currentPage === totalPages}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            className="px-3 py-1 text-sm rounded-md bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Next
+                        </button>
+                    </div>
+                )}
+
             </div>
         </section>
     )

@@ -20,6 +20,7 @@ passport.use(
       try {
         const email = profile.emails[0].value
         let user = await findUserByEmail(email)
+        console.log(profile)
 
         if (!user) {
           user = await createUser({

@@ -101,7 +101,7 @@ const Profile = ({ setShowProfile }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit(handleUpdate)} className="space-y-3 sm:space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-4">
             <InputField
               id="firstname"
               label="First Name"
@@ -150,7 +150,7 @@ const Profile = ({ setShowProfile }) => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1 bg-green-500 text-white py-1.5 sm:py-2 rounded-md flex items-center justify-center gap-1 sm:gap-2 hover:bg-green-600 disabled:opacity-50 text-sm sm:text-base"
+                  className="flex-1 bg-[var(--heading-color)] text-white py-1.5 sm:py-2 rounded-md flex items-center justify-center gap-1 sm:gap-2 hover:bg-[var(--secondary-bg-color)] hover:text-black disabled:opacity-50 text-sm sm:text-base"
                 >
                   {isLoading ? (
                     <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -180,14 +180,14 @@ const Profile = ({ setShowProfile }) => {
                   })
                   setEditMode(true)
                 }}
-                className="w-full bg-green-700 text-white py-1.5 sm:py-2 rounded-md flex items-center justify-center gap-1 sm:gap-2 hover:bg-green-800 text-sm sm:text-base"
+                className="w-full bg-[var(--heading-color)] text-white py-1.5 sm:py-2 rounded-md flex items-center justify-center gap-1 sm:gap-2 hover:bg-[var(--secondary-bg-color)] hover:text-black text-sm sm:text-base"
               >
                 <Edit2 size={14} sm:size={16} />
                 Edit Profile
               </button>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => navigate("/change-password")}

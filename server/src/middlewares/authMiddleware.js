@@ -33,6 +33,10 @@ export const authMiddleware = async (req, res, next) => {
 
             const user = await findUserById(decoded.id)
             if (!user) return errorResponse(res, "Unauthorized - user not found", 401)
+            // Important: ensure refreshToken matches DB
+            if (user.refreshToken !== refreshToken) {
+                return errorResponse(res, "Unauthorized - refresh token mismatch", 401)
+            }
 
             const newAccessToken = await signToken({ id: user._id, email: user.email })
             res.cookie("accessToken", newAccessToken, cookieOptionsForAcessToken)

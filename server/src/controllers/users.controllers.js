@@ -31,6 +31,8 @@ export const loginUserController = async (req, res, next) => {
     try {
         const { email, password } = req.body
         const { existingUser, token, refreshToken } = await loginUserService(email, password)
+        res.clearCookie("accessToken", cookieOptionsForAcessToken)
+        res.clearCookie("refreshToken", cookieOptionsForRefreshToken)
 
         res.cookie("accessToken", token, cookieOptionsForAcessToken)
         res.cookie("refreshToken", refreshToken, cookieOptionsForRefreshToken)
@@ -70,6 +72,7 @@ export const getCurrentUserController = async (req, res, next) => {
         // }
 
         const currentUser = await findUserById(req.user._id)
+        // console.log("current user", currentUser)
         return successResponse(res, "Current user fetched successfully", currentUser, 200)
 
     } catch (error) {
@@ -85,7 +88,7 @@ export const updateUserDetailsController = async (req, res, next) => {
             return errorResponse(res, "Unauthorized user", 401)
         }
         const { email, firstname, lastname, phonenumber } = req.body
-        console.log(phonenumber)
+        // console.log(phonenumber)
         if (email) {
             const existingUser = await findUserByEmail(email)
             if (existingUser && existingUser._id.toString() !== currentUser.toString()) {

@@ -29,4 +29,8 @@ body {
 .swiper-pagination-bullet-active {
   background: var(--heading-color) !important; /* green-600 */
 }
+::selection {
+  background-color:var(--secondary-bg-color); /* your custom background */
+  color: #000000;           /* text color */
+}
 
