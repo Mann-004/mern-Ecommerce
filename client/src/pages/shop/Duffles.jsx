@@ -13,7 +13,7 @@ const Duffles = () => {
   useEffect(() => {
     const fetchProductsByCategory = async () => {
       try {
-        const res = await getProductsByCategory("backpacks")
+        const res = await getProductsByCategory("duffles")
         setProducts(Array.isArray(res) ? res : [])
       } catch (error) {
         console.error("Error fetching backpack products", error)

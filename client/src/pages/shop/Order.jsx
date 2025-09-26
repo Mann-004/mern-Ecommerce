@@ -12,14 +12,15 @@ import {
 import { useNavigate } from "react-router-dom"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import ReactPaginate from "react-paginate"
 
 gsap.registerPlugin(ScrollTrigger)
 
 const Orders = () => {
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
-    const [currentPage, setCurrentPage] = useState(1)
-    const ordersPerPage = 6 // 👈 you can adjust this
+    const [currentPage, setCurrentPage] = useState(0) 
+    const ordersPerPage = 6
     const navigate = useNavigate()
     const sectionRef = useRef(null)
 
@@ -27,7 +28,10 @@ const Orders = () => {
         const fetchOrders = async () => {
             try {
                 const data = await getUserOrdersApi()
-                setOrders(data || [])
+                const sortedOrders = (data || []).sort(
+                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                )
+                setOrders(sortedOrders)
             } catch (err) {
                 console.error("Error fetching orders:", err)
             } finally {
@@ -37,31 +41,17 @@ const Orders = () => {
         fetchOrders()
     }, [])
 
-    // Pagination calculations
-    const totalPages = Math.ceil(orders.length / ordersPerPage)
-    const indexOfLastOrder = currentPage * ordersPerPage
-    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage
-    const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder)
+    // Pagination
+    const pageCount = Math.ceil(orders.length / ordersPerPage)
+    const indexOfFirstOrder = currentPage * ordersPerPage
+    const currentOrders = orders.slice(
+        indexOfFirstOrder,
+        indexOfFirstOrder + ordersPerPage
+    )
 
-    const handlePageChange = (page) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page)
-            window.scrollTo({ top: 0, behavior: "smooth" })
-        }
-    }
-
-
-    const getPaginationRange = () => {
-        const totalNumbers = 5 // 👈 show only 5 pages at a time
-        let start = Math.max(currentPage - Math.floor(totalNumbers / 2), 1)
-        let end = start + totalNumbers - 1
-
-        if (end > totalPages) {
-            end = totalPages
-            start = Math.max(end - totalNumbers + 1, 1)
-        }
-
-        return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+    const handlePageChange = ({ selected }) => {
+        setCurrentPage(selected)
+        window.scrollTo({ top: 0, behavior: "smooth" })
     }
 
     if (loading) {
@@ -169,8 +159,10 @@ const Orders = () => {
                                         <div className="mb-2 sm:mb-3 bg-gray-50 p-2 sm:p-3 rounded-lg border border-gray-200 flex items-start gap-2">
                                             <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 mt-0.5 flex-shrink-0" />
                                             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                                                {order.shippingAddress.street}, {order.shippingAddress.city},{" "}
-                                                {order.shippingAddress.state}, {order.shippingAddress.country} -{" "}
+                                                {order.shippingAddress.street},{" "}
+                                                {order.shippingAddress.city},{" "}
+                                                {order.shippingAddress.state},{" "}
+                                                {order.shippingAddress.country} -{" "}
                                                 {order.shippingAddress.postalCode}
                                             </p>
                                         </div>
@@ -235,42 +227,27 @@ const Orders = () => {
                     })}
                 </div>
 
-                {totalPages > 1 && (
-                    <div className="flex justify-center items-center gap-1 mt-8">
-                        {/* Prev Button */}
-                        <button
-                            disabled={currentPage === 1}
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            className="px-3 py-1 text-sm rounded-md bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            Prev
-                        </button>
-
-                        {/* Dynamic Page Numbers */}
-                        {getPaginationRange().map((page) => (
-                            <button
-                                key={page}
-                                onClick={() => handlePageChange(page)}
-                                className={`px-3 py-1 text-sm rounded-md ${currentPage === page
-                                        ? "bg-[var(--heading-color)] text-white"
-                                        : "bg-gray-100 hover:bg-gray-200"
-                                    }`}
-                            >
-                                {page}
-                            </button>
-                        ))}
-
-                        {/* Next Button */}
-                        <button
-                            disabled={currentPage === totalPages}
-                            onClick={() => handlePageChange(currentPage + 1)}
-                            className="px-3 py-1 text-sm rounded-md bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            Next
-                        </button>
+                {/* React Paginate */}
+                {pageCount > 1 && (
+                    <div className="mt-10 flex justify-center">
+                        <ReactPaginate
+                            breakLabel="..."
+                            nextLabel="Next ›"
+                            previousLabel="‹ Prev"
+                            onPageChange={handlePageChange}
+                            pageRangeDisplayed={3}
+                            marginPagesDisplayed={1}
+                            pageCount={pageCount}
+                            forcePage={currentPage}
+                            containerClassName="flex gap-2 items-center"
+                            pageClassName="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-sm"
+                            activeClassName="!bg-[var(--heading-color)] !text-white"
+                            previousClassName="px-3 py-1 rounded-md bg-gray-200 text-sm"
+                            nextClassName="px-3 py-1 rounded-md bg-gray-200 text-sm"
+                            disabledClassName="opacity-50 cursor-not-allowed"
+                        />
                     </div>
                 )}
-
             </div>
         </section>
     )

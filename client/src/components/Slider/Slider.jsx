@@ -11,6 +11,7 @@ import { Handbag, Eye, Star, Sparkles, ArrowRight } from "lucide-react"
 import AddToCartButton from '../AddToCartButton/AddToCart.jsx'
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { Link } from "react-router-dom"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -128,9 +129,11 @@ const Slider = () => {
                   </div>
 
                   <button className="group/btn bg-white/95 backdrop-blur-sm text-gray-900 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold shadow-xl hover:bg-white hover:scale-105 transition-all duration-300 flex items-center gap-2 sm:gap-3">
-                    <Eye size={20} />
-                    VIEW ALL
-                    <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                    <Link to={"/luggage"} className='flex gap-3 justify-center items-center'> 
+                      <Eye size={20} />
+                      VIEW ALL
+                      <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                    </Link>
                   </button>
                 </div>
               </div>
