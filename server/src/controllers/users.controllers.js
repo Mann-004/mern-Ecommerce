@@ -200,8 +200,9 @@ export const userAddressController = async (req, res, next) => {
             country,
             landmark
         })
+        // console.log("newly created address:", address)
 
-        user.addresses.push(address._id)
+        user.addresses.unshift(address._id)
         await user.save()
         return successResponse(res, "Address added successfully", address, 201)
     } catch (err) {

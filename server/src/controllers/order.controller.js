@@ -1,19 +1,35 @@
 import { getUserOrdersService, updateOrderStatusService, placeSingleOrderService, placeCartOrderService, getAllOrdersService, completeOnlineOrderService } from "../services/order.services.js"
 import { NotFoundError } from "../utils/errorHandler.js"
 import { errorResponse, successResponse } from "../utils/response.js"
+import addressModel from "../models/address.model.js"
+
 
 export const placeOrderController = async (req, res, next) => {
   try {
-    const shippingAddress = req.user.addresses?.[0]
-    if (!shippingAddress) return NotFoundError("Address not found")
+    const { addressId, productId, quantity, paymentMethod = "COD" } = req.body
+    // console.log("new addresId",addressId)
 
-    const { productId, quantity, paymentMethod = "COD" } = req.body
+    if (!addressId) return next(new NotFoundError("Address not provided"))
+
+    // Fetch the address from DB
+    const shippingAddress = await addressModel.findById(addressId)
+    if (!shippingAddress) return next(new NotFoundError("Address not found"))
+
     let order
-
     if (productId) {
-      order = await placeSingleOrderService(req.user._id, productId, quantity || 1, shippingAddress._id, paymentMethod)
+      order = await placeSingleOrderService(
+        req.user._id,
+        productId,
+        quantity || 1,
+        shippingAddress._id,
+        paymentMethod
+      )
     } else {
-      order = await placeCartOrderService(req.user._id, shippingAddress._id, paymentMethod)
+      order = await placeCartOrderService(
+        req.user._id,
+        shippingAddress._id,
+        paymentMethod
+      )
     }
 
     return successResponse(res, "Order placed successfully", order, 201)
@@ -22,7 +38,8 @@ export const placeOrderController = async (req, res, next) => {
   }
 }
 
-// New controller to handle order completion after successful payment
+
+
 export const completeOrderController = async (req, res, next) => {
   try {
     const { orderId } = req.body

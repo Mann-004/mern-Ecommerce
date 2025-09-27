@@ -1,19 +1,11 @@
 import axiosInstance from "../utils/axiosInstance";
 
 export const placeOrderApi = async (addressId, productId = null, quantity = null, paymentMethod = "COD") => {
-  const body = { paymentMethod }
+  const data = { addressId, paymentMethod }
 
-  if (productId) {
-    body.productId = productId
-    body.quantity = quantity
-  }
+  const response = await axiosInstance.post("/api/order", data)
+  return response.data
 
-  try {
-    const response = await axiosInstance.post("/api/order", body)
-    return response.data
-  } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to place order")
-  }
 }
 
 export const getUserOrdersApi = async () => {
@@ -27,7 +19,7 @@ export const getAllOrdersApi = async () => {
   return res.data.data
 }
 
-export const initiatePaymentApi = async (items,orderId) => {
+export const initiatePaymentApi = async (items, orderId) => {
   const res = await axiosInstance.post("/api/payment", {
     items,
     orderId
