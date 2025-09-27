@@ -1,7 +1,7 @@
 import axiosInstance from "../utils/axiosInstance";
 
 export const placeOrderApi = async (addressId, productId = null, quantity = null, paymentMethod = "COD") => {
-  const data = { addressId, paymentMethod }
+  const data = { addressId, productId, quantity, paymentMethod }
 
   const response = await axiosInstance.post("/api/order", data)
   return response.data

@@ -15,8 +15,8 @@ const AddToCartButton = ({ productId }) => {
         }
         try {
             await addToCart(productId)
-            navigate("/cart")
-            toast.success("Prodcuct added succesfully")
+            // navigate("/cart")
+            toast.success("Product added succesfully")
         } catch (error) {
             console.error("Error adding products to cart:", error.message)
         }

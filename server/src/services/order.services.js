@@ -78,6 +78,8 @@ export const placeSingleOrderService = async (userId, productId, quantity, addre
         quantity
     }
 
+    // console.log("product", product)
+
     const totalAmount = (product.price - product.discount) * quantity
 
     if (paymentMethod === "COD") {
@@ -85,10 +87,15 @@ export const placeSingleOrderService = async (userId, productId, quantity, addre
             $inc: { stock: -quantity }
         })
 
-        await Cart.updateOne(
-            { user: userId },
-            { $pull: { items: { product: productId } } }
-        )
+        if (productId) {
+            const cart = await Cart.findOne({ user: userId })
+            if (cart) {
+                cart.items = cart.items.filter(item => item.product.toString() !== productId.toString())
+                await cart.save()
+            }
+        } else {
+            console.log("Product ID undefined — not removing any specific item from cart")
+        }
     } else {
         console.log("ONLINE single order - NOT clearing cart yet")
     }
@@ -105,23 +112,26 @@ export const placeSingleOrderService = async (userId, productId, quantity, addre
 }
 
 export const completeOnlineOrderService = async (orderId) => {
-    const order = await orderModel.findById(orderId).populate('items.product')
+    const order = await orderModel.findById(orderId).populate("items.product")
     if (!order) throw new BadRequestError("Order not found")
 
     for (const item of order.items) {
-        await productModel.findByIdAndUpdate(item.product, {
+        await productModel.findByIdAndUpdate(item.product._id, {
             $inc: { stock: -item.quantity }
         })
     }
 
+    const productIds = order.items.map(item => item.product._id)
+
     await Cart.updateOne(
         { user: order.user },
-        { $set: { items: [] } }
+        { $pull: { items: { product: { $in: productIds } } } }
     )
 
     console.log("Online order completion finished")
     return order
 }
+
 
 export const getUserOrdersService = async (userId) => {
     return await findOrdersByUser(userId)

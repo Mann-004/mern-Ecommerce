@@ -7,11 +7,10 @@ import addressModel from "../models/address.model.js"
 export const placeOrderController = async (req, res, next) => {
   try {
     const { addressId, productId, quantity, paymentMethod = "COD" } = req.body
-    // console.log("new addresId",addressId)
+    // console.log("productID",productId)
 
     if (!addressId) return next(new NotFoundError("Address not provided"))
 
-    // Fetch the address from DB
     const shippingAddress = await addressModel.findById(addressId)
     if (!shippingAddress) return next(new NotFoundError("Address not found"))
 
@@ -53,6 +52,7 @@ export const completeOrderController = async (req, res, next) => {
 export const getUserOrdersController = async (req, res, next) => {
   try {
     const orders = await getUserOrdersService(req.user._id)
+    // console.log(orders)
     return successResponse(res, "User orders fetched", orders)
   } catch (err) {
     next(err)

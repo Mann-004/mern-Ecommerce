@@ -11,7 +11,6 @@ import { login } from "../../store/authslice"
 import toast from "react-hot-toast"
 import { Link } from "react-router-dom"
 
-console.log("backend url:", import.meta.env.VITE_API_URL)
 
 const registerSchema = Yup.object().shape({
     firstname: Yup.string()
