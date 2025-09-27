@@ -4,12 +4,12 @@ import Cart from "../models/cart.model.js"
 import productModel from "../models/product.model.js"
 import orderModel from "../models/order.model.js"
 import { BadRequestError } from "../utils/errorHandler.js"
+import { sendEmail } from "../utils/sendEmail.js"
+import { findUserById } from "../dao/users.dao.js"
 
 export const placeCartOrderService = async (userId, addressId, paymentMethod = "COD") => {
     const cart = await findCartByUser(userId)
     const products = await cart.populate("items.product")
-
-    // console.log("Cart items:", products.items.length)
 
     if (!products || products.length === 0) throw new BadRequestError("Cart is empty")
 
@@ -46,6 +46,7 @@ export const placeCartOrderService = async (userId, addressId, paymentMethod = "
 
         cart.items = []
         await cart.save()
+
     } else {
         console.log("ONLINE order - NOT clearing cart yet")
     }
@@ -59,7 +60,21 @@ export const placeCartOrderService = async (userId, addressId, paymentMethod = "
         status: "pending"
     })
 
-    // console.log("Order created:", order._id, "with payment method:", paymentMethod)
+    const user = await findUserById(userId)
+    await sendEmail({
+        to: user.email,
+        subject: "Your order has been placed successfully!",
+        text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
+        
+        Thank you for shopping with Scatch! 🛒  
+        We’ve received your order and it’s now being processed.
+        You’ll get another update as soon as your order is shipped.
+        
+        Cheers,  
+        The Scatch Team 🚀`
+    })
+
+
     return order
 }
 
@@ -77,8 +92,6 @@ export const placeSingleOrderService = async (userId, productId, quantity, addre
         discount: product.discount,
         quantity
     }
-
-    // console.log("product", product)
 
     const totalAmount = (product.price - product.discount) * quantity
 
@@ -108,6 +121,19 @@ export const placeSingleOrderService = async (userId, productId, quantity, addre
         paymentMethod,
         status: "pending"
     })
+    const user = await findUserById(userId)
+    await sendEmail({
+        to: user.email,
+        subject: "Your order has been placed successfully!",
+        text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
+        
+        Thank you for shopping with Scatch! 🛒  
+        We’ve received your order and it’s now being processed.
+        You’ll get another update as soon as your order is shipped.
+        
+        Cheers,  
+        The Scatch Team 🚀`
+    })
     return order
 }
 
@@ -127,6 +153,20 @@ export const completeOnlineOrderService = async (orderId) => {
         { user: order.user },
         { $pull: { items: { product: { $in: productIds } } } }
     )
+
+    // const user = await findUserById(orderId.user)
+    // await sendEmail({
+    //     to: user.email,
+    //     subject: "Your order has been placed successfully!",
+    //     text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
+        
+    //     Thank you for shopping with Scatch! 🛒  
+    //     We’ve received your order and it’s now being processed.
+    //     You’ll get another update as soon as your order is shipped.
+        
+    //     Cheers,  
+    //     The Scatch Team 🚀`
+    // })
 
     console.log("Online order completion finished")
     return order

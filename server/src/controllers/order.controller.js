@@ -30,7 +30,6 @@ export const placeOrderController = async (req, res, next) => {
         paymentMethod
       )
     }
-
     return successResponse(res, "Order placed successfully", order, 201)
   } catch (err) {
     next(err)

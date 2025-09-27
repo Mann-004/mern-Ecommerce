@@ -4,6 +4,7 @@ import addressModel from "../models/address.model.js"
 import { forgotPasswordServices, loginUserService, registerUserService, resetPasswordService, updatePasswordService, updateUserDeatilsServices } from "../services/users.services.js"
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../utils/errorHandler.js"
 import { errorResponse, successResponse } from "../utils/response.js"
+import { sendEmail } from "../utils/sendEmail.js"
 import { signRefreshToken, signToken } from "../utils/signToken.js"
 
 
@@ -16,9 +17,17 @@ export const registerUserController = async (req, res, next) => {
         res.cookie("accessToken", token, cookieOptionsForAcessToken)
         res.cookie("refreshToken", refreshToken, cookieOptionsForRefreshToken)
         req.user = newUser
-        // console.log("reg req user", newUser)
-        // console.log("reg access token",token)
-        // console.log("reg access token",refreshToken)
+
+        await sendEmail({
+            to: newUser.email,
+            subject: "Welcome to Scatch – Let’s Get Started!",
+            text: `Hi ${newUser.name || "there"},
+                    Welcome to Scatch! We’re excited to have you join our community.
+                    If you ever have questions, we’re here to help — just reply to this email.
+
+                    Cheers,  
+                    The Scatch Team `
+        })
 
         return successResponse(res, "User registed successfully", newUser, 201)
     } catch (error) {
