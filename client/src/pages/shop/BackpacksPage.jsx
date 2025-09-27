@@ -30,6 +30,7 @@ const Backpacks = () => {
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected)
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   return (

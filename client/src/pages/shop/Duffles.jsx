@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { getProductsByCategory } from "../../api/productAPI.js"
-import { Backpack, Compass, Mountain, Star } from "lucide-react"
+import { Backpack, Compass, Mountain, Star ,HandbagIcon, Plane} from "lucide-react"
 import SmoothSailing from "../../components/SmoothSailing/SmoothSailing.jsx"
 import AddToCartButton from "../../components/AddToCartButton/AddToCart.jsx"
 import ReactPaginate from "react-paginate"
@@ -30,26 +30,27 @@ const Duffles = () => {
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected)
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   return (
-    <div className="relative w-full bg-gradient-to-br from-emerald-100 via-white to-sky-100 px-4 sm:px-6 md:px-8 lg:px-12 py-16 sm:py-12 md:py-16 lg:py-20 overflow-hidden">
+    <div className="relative w-full bg-gradient-to-br from-orange-200 via-white to-red-200 px-4 sm:px-6 md:px-8 lg:px-12 py-16 sm:py-12 md:py-16 lg:py-20 overflow-hidden">
       <div className="text-center mb-10 sm:mb-12 md:mb-16 relative">
         {/* Adventure Icons */}
         <div className="relative flex justify-center items-center gap-4 sm:gap-5 md:gap-6 mb-6 sm:mb-8">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform cursor-pointer">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-yellow-500 to-red-500 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform cursor-pointer">
             <Mountain className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
-          <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center shadow-xl transform hover:scale-110 transition-transform cursor-pointer">
-            <Backpack className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
+          <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-r from-orange-500 to-red-6d00 rounded-full flex items-center justify-center shadow-xl transform hover:scale-110 transition-transform cursor-pointer">
+            <HandbagIcon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
           </div>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform cursor-pointer">
-            <Compass className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-red-500 to-pink-600 rounded-full flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform cursor-pointer">
+            <Plane className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
         </div>
 
         <h2 className="relative text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-3 sm:mb-4 tracking-tighter uppercase bg-gradient-to-r from-gray-900 via-emerald-800 to-sky-800 bg-clip-text text-transparent leading-tight drop-shadow-sm">
-          Backpacks
+          Duffles
         </h2>
 
         <div className="relative h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent mb-4 sm:mb-6 max-w-xs sm:max-w-sm md:max-w-md mx-auto rounded-full"></div>
