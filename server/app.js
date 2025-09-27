@@ -27,6 +27,7 @@ import productRoutes from "./src/routes/products.routes.js"
 import cartRoutes from "./src/routes/cart.routes.js"
 import orderRoutes from "./src/routes/order.routes.js"
 import stripeRoute from "./src/routes/payment.routes.js"
+import webhookRoute from "./src/routes/webhook.routes.js"
 import { swaggerDocs } from "./src/docs/swagger.js"
 
 
@@ -34,6 +35,7 @@ const app = express()
 const PORT = process.env.PORT || 3000
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+app.use("/api",webhookRoute)
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())

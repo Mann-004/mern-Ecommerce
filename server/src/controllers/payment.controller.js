@@ -1,4 +1,4 @@
-import { createCheckoutSessionService, handleWebhookEventService } from "../services/payment.services.js"
+import { createCheckoutSessionService } from "../services/payment.services.js"
 
 
 export const createCheckoutSession = async (req, res,next) => {
@@ -12,11 +12,4 @@ export const createCheckoutSession = async (req, res,next) => {
   }
 }
 
-export const handleWebhook = async (req, res) => {
-  try {
-    await handleWebhookEventService(req)
-    res.json({ received: true })
-  } catch (err) {
-    next(err)
-  }
-}
+
