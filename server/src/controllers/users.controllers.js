@@ -11,23 +11,22 @@ import { signRefreshToken, signToken } from "../utils/signToken.js"
 export const registerUserController = async (req, res, next) => {
     try {
         const { fullname, email, password, phonenumber, address, role } = req.body
-        // console.log(fullname,email,password,phonenumber,address,role)
         const { newUser, token, refreshToken } = await registerUserService(fullname, email, password, phonenumber, address, role)
 
         res.cookie("accessToken", token, cookieOptionsForAcessToken)
         res.cookie("refreshToken", refreshToken, cookieOptionsForRefreshToken)
         req.user = newUser
 
-        // await sendEmail({
-        //     to: newUser.email,
-        //     subject: "Welcome to Scatch – Let’s Get Started!",
-        //     text: `Hi ${newUser.name || "there"},
-        //             Welcome to Scatch! We’re excited to have you join our community.
-        //             If you ever have questions, we’re here to help — just reply to this email.
+        sendEmail({
+            to: newUser.email,
+            subject: "Welcome to Scatch – Let’s Get Started!",
+            text: `Hi ${newUser.name || "there"},
+                    Welcome to Scatch! We’re excited to have you join our community.
+                    If you ever have questions, we’re here to help — just reply to this email.
 
-        //             Cheers,  
-        //             The Scatch Team `
-        // })
+                    Cheers,  
+                    The Scatch Team `
+        })
 
         return successResponse(res, "User registed successfully", newUser, 201)
     } catch (error) {
@@ -47,9 +46,6 @@ export const loginUserController = async (req, res, next) => {
         res.cookie("refreshToken", refreshToken, cookieOptionsForRefreshToken)
         req.user = existingUser
 
-        // console.log("login req user", existingUser)
-        // console.log("login access token",token)
-        // console.log("login access token",refreshToken)
 
         return successResponse(res, "User Login successfully", existingUser, 200)
 

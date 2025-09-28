@@ -29,14 +29,13 @@ export const placeCartOrderService = async (userId, addressId, paymentMethod = "
         quantity: item.quantity
     }))
 
-    // console.log("ORDER ITEMS services order",orderItems)
 
     const totalAmount = orderItems.reduce(
         (sum, item) => sum + (item.price - item.discount) * item.quantity,
         0
     )
 
-    // Only reduce stock and clear cart if payment method is COD
+
     if (paymentMethod === "COD") {
         for (const item of products.items) {
             await productModel.findByIdAndUpdate(item.product._id, {
@@ -61,18 +60,18 @@ export const placeCartOrderService = async (userId, addressId, paymentMethod = "
     })
 
     const user = await findUserById(userId)
-    // await sendEmail({
-    //     to: user.email,
-    //     subject: "Your order has been placed successfully!",
-    //     text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
+    sendEmail({
+        to: user.email,
+        subject: "Your order has been placed successfully!",
+        text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
         
-    //     Thank you for shopping with Scatch! 🛒  
-    //     We’ve received your order and it’s now being processed.
-    //     You’ll get another update as soon as your order is shipped.
+        Thank you for shopping with Scatch! 🛒  
+        We’ve received your order and it’s now being processed.
+        You’ll get another update as soon as your order is shipped.
         
-    //     Cheers,  
-    //     The Scatch Team 🚀`
-    // })
+        Cheers,  
+        The Scatch Team `
+    })
 
 
     return order
@@ -107,7 +106,7 @@ export const placeSingleOrderService = async (userId, productId, quantity, addre
                 await cart.save()
             }
         } else {
-            console.log("Product ID undefined — not removing any specific item from cart")
+            throw new BadRequestError("Product Id is undefined")
         }
     } else {
         console.log("ONLINE single order - NOT clearing cart yet")
@@ -122,18 +121,18 @@ export const placeSingleOrderService = async (userId, productId, quantity, addre
         status: "pending"
     })
     const user = await findUserById(userId)
-    // await sendEmail({
-    //     to: user.email,
-    //     subject: "Your order has been placed successfully!",
-    //     text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
+    sendEmail({
+        to: user.email,
+        subject: "Your order has been placed successfully!",
+        text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
         
-    //     Thank you for shopping with Scatch! 🛒  
-    //     We’ve received your order and it’s now being processed.
-    //     You’ll get another update as soon as your order is shipped.
+        Thank you for shopping with Scatch! 🛒  
+        We’ve received your order and it’s now being processed.
+        You’ll get another update as soon as your order is shipped.
         
-    //     Cheers,  
-    //     The Scatch Team 🚀`
-    // })
+        Cheers,  
+        The Scatch Team 🚀`
+    })
     return order
 }
 
@@ -159,16 +158,15 @@ export const completeOnlineOrderService = async (orderId) => {
     //     to: user.email,
     //     subject: "Your order has been placed successfully!",
     //     text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
-        
+
     //     Thank you for shopping with Scatch! 🛒  
     //     We’ve received your order and it’s now being processed.
     //     You’ll get another update as soon as your order is shipped.
-        
+
     //     Cheers,  
     //     The Scatch Team 🚀`
     // })
 
-    console.log("Online order completion finished")
     return order
 }
 
@@ -182,6 +180,5 @@ export const getAllOrdersService = async () => {
 }
 
 export const updateOrderStatusService = async (orderId, status) => {
-    // console.log("Updating order status:", orderId, "to", status)
     return await updateOrderStatus(orderId, status)
 }
