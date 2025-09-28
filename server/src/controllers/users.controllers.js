@@ -18,16 +18,16 @@ export const registerUserController = async (req, res, next) => {
         res.cookie("refreshToken", refreshToken, cookieOptionsForRefreshToken)
         req.user = newUser
 
-        await sendEmail({
-            to: newUser.email,
-            subject: "Welcome to Scatch – Let’s Get Started!",
-            text: `Hi ${newUser.name || "there"},
-                    Welcome to Scatch! We’re excited to have you join our community.
-                    If you ever have questions, we’re here to help — just reply to this email.
+        // await sendEmail({
+        //     to: newUser.email,
+        //     subject: "Welcome to Scatch – Let’s Get Started!",
+        //     text: `Hi ${newUser.name || "there"},
+        //             Welcome to Scatch! We’re excited to have you join our community.
+        //             If you ever have questions, we’re here to help — just reply to this email.
 
-                    Cheers,  
-                    The Scatch Team `
-        })
+        //             Cheers,  
+        //             The Scatch Team `
+        // })
 
         return successResponse(res, "User registed successfully", newUser, 201)
     } catch (error) {

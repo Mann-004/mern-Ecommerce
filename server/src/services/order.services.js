@@ -61,18 +61,18 @@ export const placeCartOrderService = async (userId, addressId, paymentMethod = "
     })
 
     const user = await findUserById(userId)
-    await sendEmail({
-        to: user.email,
-        subject: "Your order has been placed successfully!",
-        text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
+    // await sendEmail({
+    //     to: user.email,
+    //     subject: "Your order has been placed successfully!",
+    //     text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
         
-        Thank you for shopping with Scatch! 🛒  
-        We’ve received your order and it’s now being processed.
-        You’ll get another update as soon as your order is shipped.
+    //     Thank you for shopping with Scatch! 🛒  
+    //     We’ve received your order and it’s now being processed.
+    //     You’ll get another update as soon as your order is shipped.
         
-        Cheers,  
-        The Scatch Team 🚀`
-    })
+    //     Cheers,  
+    //     The Scatch Team 🚀`
+    // })
 
 
     return order
@@ -122,18 +122,18 @@ export const placeSingleOrderService = async (userId, productId, quantity, addre
         status: "pending"
     })
     const user = await findUserById(userId)
-    await sendEmail({
-        to: user.email,
-        subject: "Your order has been placed successfully!",
-        text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
+    // await sendEmail({
+    //     to: user.email,
+    //     subject: "Your order has been placed successfully!",
+    //     text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
         
-        Thank you for shopping with Scatch! 🛒  
-        We’ve received your order and it’s now being processed.
-        You’ll get another update as soon as your order is shipped.
+    //     Thank you for shopping with Scatch! 🛒  
+    //     We’ve received your order and it’s now being processed.
+    //     You’ll get another update as soon as your order is shipped.
         
-        Cheers,  
-        The Scatch Team 🚀`
-    })
+    //     Cheers,  
+    //     The Scatch Team 🚀`
+    // })
     return order
 }
 

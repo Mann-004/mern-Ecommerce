@@ -124,11 +124,16 @@ Create a `.env` file in the `/server` directory with the following variables:
 # Backend
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/scatch
+NODE_ENV=develo pment
+
 JWT_SECRET=your_jwt_secret_key
+
 STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-NODE_ENV=development
+CALLBACK_URL=your_callback_url
 
 # Frontend (create .env in /client)
 VITE_API_URL=http://localhost:5000/api
@@ -215,41 +220,4 @@ The backend includes **Swagger UI** for API documentation and testing.
 - `PUT /api/orders/:id` - Update order status (admin-only)
 
 > **Note**: All routes are documented in Swagger UI at `/api-docs`.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-### Suggestions for Further Improvements
-
-1. **Add Deployment Instructions**:
-   - Include steps for deploying the app to platforms like Vercel (frontend) and Render/Heroku (backend).
-   - Mention how to configure environment variables in production.
-
-2. **Testing Section**:
-   - Add a section for running tests (e.g., Jest for backend, Vitest/Cypress for frontend) if applicable.
-
-3. **Screenshots or Demo**:
-   - Include screenshots or a link to a live demo to showcase the UI.
-
-4. **Contributing Guidelines**:
-   - Add a `CONTRIBUTING.md` file or a section for how others can contribute to the project.
-
-5. **Error Handling and Security**:
-   - Mention any specific error-handling strategies or security practices (e.g., input sanitization, rate limiting).
-
-6. **Performance Optimizations**:
-   - Highlight any optimizations (e.g., lazy loading, code splitting, or MongoDB indexing) used in the project.
-
-7. **Changelog**:
-   - Consider adding a `CHANGELOG.md` to track updates and versions.
-
-Let me know if you'd like help implementing any of these suggestions or further refining specific sections!
-
-
-# 2.continue with google does not genrating cookie which always shows the unauthorized user
 
