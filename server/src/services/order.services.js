@@ -38,9 +38,11 @@ export const placeCartOrderService = async (userId, addressId, paymentMethod = "
 
     if (paymentMethod === "COD") {
         for (const item of products.items) {
-            await productModel.findByIdAndUpdate(item.product._id, {
+             await productModel.findByIdAndUpdate(item.product._id, {
                 $inc: { stock: -item.quantity }
+        
             })
+
         }
 
         cart.items = []
@@ -131,7 +133,7 @@ export const placeSingleOrderService = async (userId, productId, quantity, addre
         You’ll get another update as soon as your order is shipped.
         
         Cheers,  
-        The Scatch Team 🚀`
+        The Scatch Team `
     })
     return order
 }
@@ -154,7 +156,7 @@ export const completeOnlineOrderService = async (orderId) => {
     )
 
     // const user = await findUserById(orderId.user)
-    // await sendEmail({
+    // sendEmail({
     //     to: user.email,
     //     subject: "Your order has been placed successfully!",
     //     text: `Hi ${user.fullname.firstname + " " + user.fullname.lastname || "there"},
@@ -164,7 +166,7 @@ export const completeOnlineOrderService = async (orderId) => {
     //     You’ll get another update as soon as your order is shipped.
 
     //     Cheers,  
-    //     The Scatch Team 🚀`
+    //     The Scatch Team 😊`
     // })
 
     return order

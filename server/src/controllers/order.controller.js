@@ -7,7 +7,7 @@ import addressModel from "../models/address.model.js"
 export const placeOrderController = async (req, res, next) => {
   try {
     const { addressId, productId, quantity, paymentMethod = "COD" } = req.body
-  
+
     if (!addressId) return next(new NotFoundError("Address not provided"))
 
     const shippingAddress = await addressModel.findById(addressId)

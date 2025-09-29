@@ -127,8 +127,6 @@ router.post("/", authMiddleware, placeOrderController)
  */
 router.get("/my-order", authMiddleware, getUserOrdersController)
 
-
-
 /**
  * @swagger
  * /api/orders/all:
